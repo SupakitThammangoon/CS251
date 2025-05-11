@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #ffe6f0;
+    color: #333;
+}
+
+header {
+    background-color: #fff;
+    padding: 15px 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ff4d94;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    width: 200px;
+}
+
+.search-bar button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.profile-icon img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.theater-section {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.theater-section h2 {
+    font-size: 24px;
+    color: #ff4d94;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.theater-menu {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.theater-menu a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 10px;
+    transition: all 0.3s;
+}
+
+.theater-menu a:hover {
+    color: #ff4d94;
+    border-bottom: 2px solid #ff4d94;
+}
+
+.theater-menu a.active {
+    color: #ff4d94;
+    border-bottom: 2px solid #ff4d94;
+}
+
+.theater-content {
+    display: none;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.theater-content.active {
+    display: block;
+}
+
+.theater-content ul {
+    list-style: none;
+}
+
+.theater-content li {
+    padding: 10px 0;
+    font-size: 16px;
+    color: #666;
+}
