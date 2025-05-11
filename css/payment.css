@@ -1,0 +1,120 @@
+/* payment.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #ffe6f0;
+  color: #333;
+}
+
+header {
+  background-color: #fff;
+  padding: 15px 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #ff4d94;
+}
+
+.profile-icon img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.payment-section {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.payment-section h2,
+.payment-section h3 {
+  text-align: center;
+  color: #ff4d94;
+  margin-bottom: 20px;
+}
+
+.order-summary {
+  padding: 20px;
+  background-color: #ffe6f0;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.item,
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.seat-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.seat-info img {
+  width: 24px;
+  height: 24px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: #ccc;
+  margin: 15px 0;
+}
+
+.payment-options {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.option {
+  width: 130px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.option:hover {
+  transform: scale(1.05);
+}
+
+.option img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ / ลงทะเบียน</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS อยู่ในส่วนนี้ด้านล่าง */
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-links">
+            <a href="../html/home.html">หน้าหลัก</a>
+            <a href="../html/movie.html">ภาพยนต์</a>
+            <a href="../html/theater.html">โรงภาพยนต์</a>
+        </div>
+
+        <div class="profile-icon">
+            <a href="../html/profile.html">
+                <img src="../img/profile.png" alt="Profile Icon">
+            </a>
+        </div>
+    </header>
+    
+    <section class="auth-section">
+        <div class="auth-card login">
+            <h2>เข้าสู่ระบบ</h2>
+
+            <div class="input-icon">
+                <i class="fa fa-user"></i>
+                <input type="text" placeholder="บัญชีผู้ใช้">
+            </div>
+
+            <div class="input-icon">
+                <input type="password" placeholder="รหัสผ่าน" id="loginPassword">
+                <i class="fa fa-eye-slash toggle-eye" id="loginToggle"></i>
+            </div>
+
+            <div class="options">
+                <label><input type="checkbox"> จดจำฉัน</label>
+                <a href="#">ลืมรหัสผ่าน</a>
+            </div>
+
+            <button class="btn">เข้าสู่ระบบ</button>
+        </div>
+
+        <div class="auth-card register">
+            <h2>ลงทะเบียน</h2>
+
+            <div class="input-icon">
+                <i class="fa fa-user"></i>
+                <input type="text" placeholder="บัญชีผู้ใช้">
+            </div>
+
+            <div class="input-icon">
+                <i class="fa fa-envelope"></i>
+                <input type="email" placeholder="Email">
+            </div>
+
+            <div class="input-icon">
+                <i class="fa fa-phone"></i>
+                <input type="tel" placeholder="เบอร์มือถือ">
+            </div>
+
+            <div class="input-icon">
+                <input type="password" placeholder="รหัสผ่าน" id="registerPassword">
+                <i class="fa fa-eye-slash toggle-eye" id="registerToggle"></i>
+            </div>
+
+            <button class="btn">ลงทะเบียน</button>
+        </div>
+    </section>
+
+    <script src="../js/login.js" defer></script>
+
+</body>
+</html>
