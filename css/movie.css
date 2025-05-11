@@ -39,28 +39,6 @@ header {
     color: #ff4d94;
 }
 
-.search-bar {
-    display: flex;
-    align-items: center;
-}
-
-.search-bar input {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
-    outline: none;
-    width: 200px;
-}
-
-.search-bar button {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-left: none;
-    border-radius: 0 5px 5px 0;
-    background-color: #fff;
-    cursor: pointer;
-}
-
 .profile-icon a {
     display: inline-block;
 }
@@ -88,80 +66,85 @@ header {
 .movie-tabs {
     display: flex;
     gap: 15px;
-    font-size: 20px;
+    align-items: center;
 }
 
 .movie-tabs a {
     text-decoration: none;
-    color: #ff4d94;
+    color: #333;
+    font-size: 18px;
     font-weight: bold;
-    transition: color 0.3s;
+    opacity: 0.5;
+    transition: opacity 0.3s, color 0.3s;
+    position: relative;
+    padding-bottom: 5px;
 }
 
-.movie-tabs a:hover {
-    color: #ff1a75;
+.movie-tabs a.active {
+    opacity: 1;
+    color: #ff4d94;
+}
+
+.movie-tabs a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #ff4d94;
 }
 
 .movie-tabs span {
-    color: #ff4d94;
+    color: #ccc;
 }
 
 .movie-search {
     display: flex;
     align-items: center;
     position: relative;
-    transition: all 0.3s ease;
 }
 
 .movie-search input {
-    padding: 8px 40px 8px 15px;
+    padding: 10px 40px 10px 15px;
     border: 2px solid #ff4d94;
     border-radius: 25px;
     outline: none;
-    width: 200px;
+    width: 250px;
     font-size: 16px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .movie-search input:focus {
-    width: 250px;
-    border-color: #ff1a75;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    border-color: #cc0052;
+    box-shadow: 0 0 10px rgba(255, 77, 148, 0.3);
 }
 
 .movie-search button {
     position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 8px 15px;
+    right: 5px;
+    padding: 8px 12px;
     border: none;
-    border-radius: 0 25px 25px 0;
-    background-color: #ff4d94;
-    color: #fff;
+    background: none;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+    font-size: 18px;
+    color: #ff4d94;
+    transition: color 0.3s;
 }
 
 .movie-search button:hover {
-    background-color: #ff1a75;
+    color: #cc0052;
 }
 
 .movie-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
 }
 
 .movie-card {
     position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
+    cursor: pointer;
 }
 
 .movie-card img {
@@ -171,25 +154,21 @@ header {
     display: block;
 }
 
-.movie-card:hover {
-    transform: scale(1.05);
-}
-
 .movie-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     transition: opacity 0.3s;
-    font-size: 18px;
-    font-weight: bold;
+    border-radius: 10px;
+    font-size: 16px;
 }
 
 .movie-card:hover .movie-overlay {
