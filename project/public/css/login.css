@@ -68,6 +68,12 @@ header {
     color: #333;
 }
 
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 .input-icon {
     position: relative;
 }
