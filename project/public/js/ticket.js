@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <a href="../html/movie.html" style="margin-top:20px; display:inline-block; background-color:#ff6699; color:white; padding:10px 20px; border-radius:8px; text-decoration:none;">เลือกภาพยนตร์เลย</a>
         </div>
       `;
+      document.querySelector(".ticket-section").style.display = "block";
       return;
     }
 
@@ -62,6 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }).join("");
 
     document.querySelector(".ticket-section").innerHTML = html;
+    document.querySelector(".ticket-section").style.display = "block";
 
   } catch (err) {
     console.error("โหลดข้อมูลตั๋วล้มเหลว", err);
