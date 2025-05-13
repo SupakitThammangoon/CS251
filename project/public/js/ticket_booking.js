@@ -47,14 +47,23 @@ function updateSelectionInfo() {
 // ✅ ฟังก์ชันส่งข้อมูลการจองไป backend
 function submitBooking() {
   if (selectedSeats.size === 0) {
-    alert("กรุณาเลือกที่นั่งอย่างน้อยหนึ่งที่นั่ง!");
+    Swal.fire({
+      icon: 'warning',
+      title: 'กรุณาเลือกอย่างน้อยหนึ่งที่นั่ง',
+    })
     return;
   }
 
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!user) {
-    alert("กรุณาเข้าสู่ระบบก่อนทำการจอง");
-    window.location.href = "login.html";
+     Swal.fire({
+      icon: 'warning',
+      title: 'ยังไม่ได้เข้าสู่ระบบ',
+      text: 'กรุณาเข้าสู่ระบบก่อนใช้งานระบบจองตั๋ว',
+      confirmButtonText: 'ไปหน้าเข้าสู่ระบบ'
+    }).then(() => {
+      window.location.href = "../html/login.html";
+    });
     return;
   }
 
@@ -110,10 +119,18 @@ function submitBooking() {
     })
     .catch((err) => {
       if (err.duplicated) {
-        alert("❌ ที่นั่งต่อไปนี้ถูกจองไปแล้ว: " + err.duplicated.join(", "));
+        Swal.fire({
+          icon: 'error',
+          title: 'ที่นั่งถูกจองแล้ว',
+          text: '❌ ที่นั่งต่อไปนี้ถูกจองไปแล้ว: ' + err.duplicated.join(", "),
+      });
       } else {
         console.error("Booking Error:", err);
-        alert("เกิดข้อผิดพลาดในการจอง: " + err.message);
-      }
-    });
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาดในการจอง',
+          text: 'เกิดข้อผิดพลาดในการจอง: ' + err.message,
+      });
+    }
+  });
 }
