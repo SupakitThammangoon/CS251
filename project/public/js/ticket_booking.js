@@ -2,11 +2,10 @@ const seatContainer = document.querySelector(".seats");
 const selectedSeatSpan = document.getElementById("selectedSeat");
 const priceSpan = document.getElementById("price");
 
-const seatPrice = 300; // Fixed price per seat
+const seatPrice = 300;
 const selectedSeats = new Set();
 
-// Create seats dynamically inside each row (from E to A)
-
+// ✅ สร้างแถวและที่นั่ง
 ["E", "D", "C", "B", "A"].forEach((rowLabel) => {
   const row = document.createElement("div");
   row.classList.add("row");
@@ -23,7 +22,7 @@ const selectedSeats = new Set();
   seatContainer.appendChild(row);
 });
 
-
+// ✅ เมื่อคลิกที่นั่ง
 function toggleSeat(event) {
   const seat = event.target;
   const seatCode = seat.dataset.seat;
@@ -39,18 +38,28 @@ function toggleSeat(event) {
   updateSelectionInfo();
 }
 
+// ✅ อัปเดตรายการที่นั่งและราคา
 function updateSelectionInfo() {
   selectedSeatSpan.textContent = Array.from(selectedSeats).join(", ") || "-";
   priceSpan.textContent = selectedSeats.size * seatPrice;
 }
 
+// ✅ ฟังก์ชันส่งข้อมูลการจองไป backend
 function submitBooking() {
   if (selectedSeats.size === 0) {
     alert("กรุณาเลือกที่นั่งอย่างน้อยหนึ่งที่นั่ง!");
     return;
   }
 
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (!user) {
+    alert("กรุณาเข้าสู่ระบบก่อนทำการจอง");
+    window.location.href = "login.html";
+    return;
+  }
+
   const bookingData = {
+    username: user.username,
     seats: Array.from(selectedSeats),
     totalPrice: selectedSeats.size * seatPrice,
     movie: "Doraemon: Nobita's Space Heroes",
@@ -58,20 +67,53 @@ function submitBooking() {
     cinema: "พารากอน Cinema 1",
   };
 
-  // ส่งข้อมูลไป backend
-  fetch("/api/book", {
+  // ✅ ตรวจสอบว่าที่นั่งถูกจองไปหรือยัง
+  fetch("/api/check-seats", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(bookingData),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      seats: bookingData.seats,
+      movie: bookingData.movie,
+      time: bookingData.time,
+      cinema: bookingData.cinema,
+    }),
   })
-    .then((res) => {
+    .then(res => {
+      if (res.status === 409) return res.json().then(data => { throw { duplicated: data.duplicated }; });
+      if (!res.ok) throw new Error("ไม่สามารถตรวจสอบที่นั่งได้");
+      return res.json();
+    })
+    .then(() => {
+      // ✅ ดำเนินการจอง
+      return fetch("/api/book", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingData),
+      });
+    })
+    .then(res => {
       if (!res.ok) throw new Error("การจองล้มเหลว");
       return res.json();
     })
     .then((data) => {
-      alert("จองที่นั่งเรียบร้อย! หมายเลขตั๋ว: " + data.ticketId);
+      // ✅ บันทึกข้อมูลสำหรับหน้าชำระเงิน
+      localStorage.setItem("latestTicket", JSON.stringify({
+        ticketId: data.ticketId,
+        movie: bookingData.movie,
+        seats: bookingData.seats,
+        total: bookingData.totalPrice,
+        cinema: bookingData.cinema,
+        time: bookingData.time
+      }));
+
+      window.location.href = "../html/payment.html";
     })
-    .catch((err) => alert(err.message));
+    .catch((err) => {
+      if (err.duplicated) {
+        alert("❌ ที่นั่งต่อไปนี้ถูกจองไปแล้ว: " + err.duplicated.join(", "));
+      } else {
+        console.error("Booking Error:", err);
+        alert("เกิดข้อผิดพลาดในการจอง: " + err.message);
+      }
+    });
 }

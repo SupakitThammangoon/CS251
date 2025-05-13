@@ -12,3 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("profile-email").textContent = user.email;
   document.getElementById("profile-phone").textContent = user.phone;
 });
+
+function logout() {
+    localStorage.removeItem('user'); 
+    window.location.href = '../home.html'; 
+}
