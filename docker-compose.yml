@@ -13,7 +13,7 @@ services:
       - app-network
 
   backend:
-    build: ./backend
+    build: ./project
     container_name: node-backend
     ports:
       - "3000:3000"
@@ -21,6 +21,9 @@ services:
       - sqlserver
     networks:
       - app-network
-
+    volumes:
+      - ./project:/app
+    working_dir: /app
+    command: npm run dev
 networks:
   app-network:
