@@ -1,8 +1,14 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!user) {
-    alert("กรุณาเข้าสู่ระบบก่อน");
-    window.location.href = "../html/login.html";
+     Swal.fire({
+      icon: 'warning',
+      title: 'ยังไม่ได้เข้าสู่ระบบ',
+      text: 'กรุณาเข้าสู่ระบบก่อนใช้งานระบบจองตั๋ว',
+      confirmButtonText: 'ไปหน้าเข้าสู่ระบบ'
+    }).then(() => {
+      window.location.href = "../html/login.html";
+    });
     return;
   }
 
@@ -16,7 +22,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const bookings = await res.json();
 
     if (bookings.length === 0) {
-      document.querySelector(".ticket-section").innerHTML = "<p>ไม่มีข้อมูลการจอง</p>";
+      document.querySelector(".ticket-section").innerHTML = `
+        <div style="text-align:center; padding: 50px;">
+          <h2 style="color: #666;">🛑 ไม่มีข้อมูลการจอง</h2>
+          <p>ดูเหมือนว่าคุณยังไม่ได้จองตั๋วภาพยนตร์</p>
+          <a href="../html/movie.html" style="margin-top:20px; display:inline-block; background-color:#ff6699; color:white; padding:10px 20px; border-radius:8px; text-decoration:none;">เลือกภาพยนตร์เลย</a>
+        </div>
+      `;
       return;
     }
 
@@ -53,6 +65,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.error("โหลดข้อมูลตั๋วล้มเหลว", err);
-    alert("เกิดข้อผิดพลาดในการโหลดข้อมูล");
+    Swal.fire({
+      icon: 'error',
+      title: 'ผิดพลาด!',
+      text: 'เกิดข้อผิดพลาดในการโหลดข้อมูลตั๋ว',
+      confirmButtonText: 'ตกลง'
+    });
   }
 });
