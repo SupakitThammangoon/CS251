@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
   if (!user) {
-    alert("กรุณาเข้าสู่ระบบก่อนใช้งานหน้านี้");
     window.location.href = "../html/login.html";
     return;
   }
@@ -14,6 +13,25 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function logout() {
-    localStorage.removeItem('user'); 
-    window.location.href = '../home.html'; 
+    // ลบข้อมูลออกก่อน
+    localStorage.removeItem("loggedInUser");
+
+    // เด้ง popup
+    Swal.fire({
+        icon: 'success',
+        title: 'ออกจากระบบแล้ว',
+        text: 'ขอบคุณที่ใช้งาน!',
+        confirmButtonColor: '#ff66b2',
+        showConfirmButton: false,
+        background: '#fff0f5',
+        color: '#333',
+        timer: 2000,
+        timerProgressBar: true,
+        position: 'center'
+    }).then(() => {
+        // พอ popup หาย → เด้งไปหน้าอื่น
+        window.location.href = "../html/login.html"; // หรือ home.html
+    });
 }
+
+

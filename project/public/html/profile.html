@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>โปรไฟล์ - เว็บไซต์ภาพยนตร์</title>
     <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <header>
@@ -12,7 +15,6 @@
             <a href="../home.html">หน้าหลัก</a>
             <a href="../html/movie.html">ภาพยนตร์</a>
             <a href="../html/theater.html">โรงภาพยนตร์</a>
-            <button onclick="logout()">ออกจากระบบ</button>
         </div>
         
         <div class="profile-icon">
@@ -29,6 +31,7 @@
                 <p><span>ชื่อ:</span> <span id="profile-name"></span></p>
                 <p><span>อีเมล:</span> <span id="profile-email"></span></p>
                 <p><span>เบอร์โทรศัพท์:</span> <span id="profile-phone"></span></p>
+                <button type="submit" class="btn" onclick="logout()">Logout</button>
             </div>
         </div>
     </section>

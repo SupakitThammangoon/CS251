@@ -55,14 +55,22 @@ document.querySelector(".login .btn").addEventListener("click", async function (
         if (result.success) {
             // บันทึกข้อมูล user ลง localStorage
             localStorage.setItem("loggedInUser", JSON.stringify(result.user));
-            alert("เข้าสู่ระบบสำเร็จ");
-            window.location.href = "../home.html"; // หรือ profile.html ถ้าจะเด้งไปหน้านั้นเลย
+             Swal.fire({
+                icon: 'success',
+                title: 'เข้าสู่ระบบสำเร็จ!',
+                text: `ยินดีต้อนรับ, ${result.user.username}`,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = "../home.html"; // หรือ profile.html
+            });
+
         } else {
-            alert(result.message);
+            Swal.fire("ไม่ผ่าน!", result.message || "ชื่อผู้ใช้หรือรหัสผ่านผิด", "error");
         }
     } catch (error) {
         console.error("Login Error:", error);
-        alert("เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
+                Swal.fire("เกิดข้อผิดผลาด!", "เซิร์ฟเวอร์ผิดปกติ", "error");
     }
 });
 
