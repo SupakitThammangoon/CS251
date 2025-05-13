@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ============================
 const dbConfig = {
   user: 'sa',
-  password: '12345',
+  password: 'YourStrong@Passw0rd',
   server: 'localhost',
   database: 'MovieDB', // ต้องตรงกับใน SSMS
   options: {
