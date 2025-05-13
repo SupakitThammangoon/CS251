@@ -1,10 +1,14 @@
-document.querySelector('.edit-button').addEventListener('click', () => {
-    alert('กำลังไปที่หน้าแก้ไขโปรไฟล์...');
-});
+document.addEventListener("DOMContentLoaded", () => {
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
-document.querySelector('.search-bar button').addEventListener('click', () => {
-    const query = document.querySelector('.search-bar input').value;
-    if (query) {
-        alert(`กำลังค้นหา: ${query}`);
-    }
+  if (!user) {
+    alert("กรุณาเข้าสู่ระบบก่อนใช้งานหน้านี้");
+    window.location.href = "../html/login.html";
+    return;
+  }
+
+  // แสดงข้อมูลบนหน้า
+  document.getElementById("profile-name").textContent = user.username;
+  document.getElementById("profile-email").textContent = user.email;
+  document.getElementById("profile-phone").textContent = user.phone;
 });

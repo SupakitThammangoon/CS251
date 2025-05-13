@@ -32,11 +32,11 @@
 
             <div class="input-icon">
                 <i class="fa fa-user"></i>
-                <input type="text" placeholder="บัญชีผู้ใช้">
+                <input type="text" id="loginUsername" placeholder="บัญชีผู้ใช้" required>
             </div>
 
             <div class="input-icon">
-                <input type="password" placeholder="รหัสผ่าน" id="loginPassword">
+                <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
                 <i class="fa fa-eye-slash toggle-eye" id="loginToggle"></i>
             </div>
 
@@ -50,28 +50,29 @@
 
         <div class="auth-card register">
             <h2>ลงทะเบียน</h2>
+            <form id="registerForm">
+                <div class="input-icon">
+                    <i class="fa fa-user"></i>
+                    <input type="text" name="username" placeholder="บัญชีผู้ใช้" required>
+                </div>
 
-            <div class="input-icon">
-                <i class="fa fa-user"></i>
-                <input type="text" placeholder="บัญชีผู้ใช้">
-            </div>
+                <div class="input-icon">
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
 
-            <div class="input-icon">
-                <i class="fa fa-envelope"></i>
-                <input type="email" placeholder="Email">
-            </div>
+                <div class="input-icon">
+                    <i class="fa fa-phone"></i>
+                    <input type="tel" name="phone" placeholder="เบอร์มือถือ" required>
+                </div>
 
-            <div class="input-icon">
-                <i class="fa fa-phone"></i>
-                <input type="tel" placeholder="เบอร์มือถือ">
-            </div>
+                <div class="input-icon">
+                    <input type="password" name="password" placeholder="รหัสผ่าน" id="registerPassword" required>
+                    <i class="fa fa-eye-slash toggle-eye" id="registerToggle"></i>
+                </div>
 
-            <div class="input-icon">
-                <input type="password" placeholder="รหัสผ่าน" id="registerPassword">
-                <i class="fa fa-eye-slash toggle-eye" id="registerToggle"></i>
-            </div>
-
-            <button class="btn">ลงทะเบียน</button>
+                <button type="submit" class="btn">ลงทะเบียน</button>
+            </form>
         </div>
     </section>
 
