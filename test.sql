@@ -3,8 +3,48 @@ CREATE DATABASE MovieBookingDB;
 GO
 
 -- เลือกใช้ฐานข้อมูลนี้
--- USE MovieBookingDB;
--- GO
+USE MovieBookingDB;
+GO
+
+-- ตาราง Users
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(50) NOT NULL UNIQUE,
+    Password NVARCHAR(255) NOT NULL,
+    FullName NVARCHAR(100),
+    Email NVARCHAR(100),
+    Phone NVARCHAR(20)
+);
+GO
+
+-- ตาราง Movies
+CREATE TABLE Movies (
+    MovieID INT PRIMARY KEY IDENTITY(1,1),
+    Title NVARCHAR(100) NOT NULL,
+    Genre NVARCHAR(50),
+    Duration INT, -- นาที
+    Description NVARCHAR(MAX),
+    ReleaseDate DATE
+);
+GO
+
+-- ตาราง Theaters
+CREATE TABLE Theaters (
+    TheaterID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100) NOT NULL,
+    Location NVARCHAR(255)
+);
+GO
+
+-- ตาราง Showtimes
+CREATE TABLE Showtimes (
+    ShowtimeID INT PRIMARY KEY IDENTITY(1,1),
+    MovieID INT FOREIGN KEY REFERENCES Movies(MovieID),
+    TheaterID INT FOREIGN KEY REFERENCES Theaters(TheaterID),
+    StartTime DATETIME NOT NULL,
+    Screen NVARCHAR(50)
+);
+GO
 
 -- สร้างตาราง Bookings
 CREATE TABLE Bookings (
@@ -16,13 +56,3 @@ CREATE TABLE Bookings (
     Price INT
 );
 GO
-
--- ใส่ข้อมูลตัวอย่าง
-INSERT INTO Bookings (MovieName, ShowTime, Cinema, Seat, Price)
-VALUES 
-  ('Doraemon: Nobita''s Space Heroes', '2015-04-20 11:00', 'พารากอน Cinema 1', 'A1', 300),
-  ('Doraemon: Nobita''s Space Heroes', '2015-04-20 11:00', 'พารากอน Cinema 1', 'A2', 300);
-GO
-
--- ตรวจสอบข้อมูล
-SELECT * FROM Bookings;
