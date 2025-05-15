@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const res = await fetch("http://localhost:3000/api/user-bookings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user.id }) // ✅ ใช้ user.id แทน username
+      body: JSON.stringify({ userId: user.id })
     });
 
     const bookings = await res.json();
@@ -45,9 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="ticket-card">
           <img src="../img/doraemon_poster.jpg" alt="Movie Poster">
           <div class="right-section">
-            <div class="qr-code">
-              <img src="../img/QRCODE.png" alt="QR Code">
-            </div>
+            <div class="qr-code" id="qrcode-${b.id}"></div>
             <div class="ticket-info">
               <p><span>ชื่อภาพยนตร์:</span> ${b.movie}</p>
               <p><span>โรงภาพยนตร์:</span> ${b.cinema}</p>
@@ -63,6 +61,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.querySelector(".ticket-section").innerHTML = html;
     document.querySelector(".ticket-section").style.display = "block";
+
+    bookings.forEach(b => {
+    // ✅ สั้นที่สุด ป้องกัน QR code overflow แน่นอน
+    const qrText = `${b.id}`;  // หรือ encode URL ก็ได้ เช่น `https://yourapp.com/ticket/${b.id}`
+
+      new QRCode(document.getElementById(`qrcode-${b.id}`), {
+      text: qrText,
+      width: 100,
+      height: 100
+      });
+    });
+
 
   } catch (err) {
     console.error("โหลดข้อมูลตั๋วล้มเหลว", err);

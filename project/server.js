@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ============================
 const dbConfig = {
   user: 'sa',
-  password: '12345',
+  password: 'YourStrong@Passw0rd',
   server: 'localhost',
   database: 'MovieDB', // ต้องตรงกับใน SSMS
   options: {
@@ -35,19 +35,19 @@ app.get('/', (req, res) => {
 });
 
 // ============================
-// 📌 API: ลงทะเบียน
+// 📌 API: ลงทะเบียน (เพิ่ม role เป็นค่าเริ่มต้น 'user')
 // ============================
 app.post('/api/register', async (req, res) => {
-  const { username, email, phone, password } = req.body;
+  const { username, email, phone, password, role = 'user' } = req.body; // เพิ่ม role, default 'user'
 
   try {
     // เชื่อมต่อฐานข้อมูล
     await sql.connect(dbConfig);
 
-    // INSERT ข้อมูลลง Table
+    // INSERT ข้อมูลลง Table รวม role
     await sql.query`
-      INSERT INTO Users (username, email, phone, password)
-      VALUES (${username}, ${email}, ${phone}, ${password})
+      INSERT INTO Users (username, email, phone, password, role)
+      VALUES (${username}, ${email}, ${phone}, ${password}, ${role})
     `;
 
     res.status(200).json({ message: 'ลงทะเบียนสำเร็จ!' });
@@ -58,7 +58,7 @@ app.post('/api/register', async (req, res) => {
 });
 
 // ============================
-// 📌 API: เข้าสู่ระบบ
+// 📌 API: เข้าสู่ระบบ (ดึง role ด้วย)
 // ============================
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
@@ -67,12 +67,12 @@ app.post('/api/login', async (req, res) => {
     await sql.connect(dbConfig);
 
     const result = await sql.query`
-      SELECT id, username, email, phone FROM Users
+      SELECT id, username, email, phone, role FROM Users
       WHERE username = ${username} AND password = ${password}
     `;
 
     if (result.recordset.length > 0) {
-      const user = result.recordset[0]; // ดึงข้อมูลผู้ใช้
+      const user = result.recordset[0]; // ดึงข้อมูลผู้ใช้รวม role
       res.status(200).json({ success: true, user }); // ส่งกลับ client
     } else {
       res.status(401).json({ success: false, message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
@@ -163,7 +163,18 @@ app.post('/api/user-bookings', async (req, res) => {
     await sql.connect(dbConfig);
 
     const result = await sql.query`
-      SELECT * FROM Bookings WHERE user_id = ${userId}
+      SELECT 
+        B.id,
+        B.movie,
+        B.time,
+        B.cinema,
+        B.seats,
+        B.total_price,
+        B.booking_date,
+        U.username
+      FROM Bookings B
+      JOIN Users U ON B.user_id = U.id
+      WHERE B.user_id = ${userId}
     `;
 
     res.status(200).json(result.recordset);
@@ -172,6 +183,7 @@ app.post('/api/user-bookings', async (req, res) => {
     res.status(500).json({ message: "ไม่สามารถโหลดข้อมูลตั๋วได้" });
   }
 });
+
 
 // ============================
 // 🚀 เริ่ม Server
@@ -212,3 +224,81 @@ app.post('/api/check-seats', async (req, res) => {
   }
 });
 
+// ============================
+// 📌 API: Admin - ดึงรายชื่อผู้ใช้ทั้งหมด
+// ============================
+app.get('/api/admin/users', async (req, res) => {
+  try {
+    await sql.connect(dbConfig);
+    const result = await sql.query`SELECT id, username, email, phone FROM Users`;
+    res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error("❌ Admin Get Users Error:", error);
+    res.status(500).json({ message: "ไม่สามารถโหลดรายชื่อผู้ใช้ได้" });
+  }
+});
+
+// ============================
+// 📌 API: Admin - ดึงข้อมูลการจองทั้งหมด
+// ============================
+app.get('/api/admin/bookings', async (req, res) => {
+  try {
+    await sql.connect(dbConfig);
+    const result = await sql.query`SELECT * FROM Bookings ORDER BY booking_date DESC`;
+    res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error("❌ Admin Get Bookings Error:", error);
+    res.status(500).json({ message: "ไม่สามารถโหลดข้อมูลการจองได้" });
+  }
+});
+
+// ============================
+// 📌 API: Admin - ลบผู้ใช้
+// ============================
+app.delete('/api/admin/users/:id', async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    await sql.connect(dbConfig);
+    await sql.query`DELETE FROM Users WHERE id = ${userId}`;
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("❌ Delete User Error:", error);
+    res.status(500).json({ success: false, message: "ไม่สามารถลบผู้ใช้ได้" });
+  }
+});
+
+// ============================
+// 📌 API: Admin - ลบการจอง
+// ============================
+app.delete('/api/admin/bookings/:id', async (req, res) => {
+  const bookingId = req.params.id;
+
+  try {
+    await sql.connect(dbConfig);
+    await sql.query`DELETE FROM Bookings WHERE id = ${bookingId}`;
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("❌ Delete Booking Error:", error);
+    res.status(500).json({ success: false, message: "ไม่สามารถลบการจองได้" });
+  }
+});
+app.get('/api/profile/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await sql.connect(dbConfig);
+    const result = await sql.query`
+      SELECT id, username, email, phone, role FROM Users WHERE id = ${id}
+    `;
+
+    if (result.recordset.length > 0) {
+      res.status(200).json(result.recordset[0]);  // จะมี role ด้วย
+    } else {
+      res.status(404).json({ message: "ไม่พบผู้ใช้" });
+    }
+  } catch (error) {
+    console.error('❌ Profile Fetch Error:', error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงโปรไฟล์" });
+  }
+});

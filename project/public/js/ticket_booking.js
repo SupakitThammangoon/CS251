@@ -50,13 +50,13 @@ function submitBooking() {
     Swal.fire({
       icon: 'warning',
       title: 'กรุณาเลือกอย่างน้อยหนึ่งที่นั่ง',
-    })
+    });
     return;
   }
 
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (!user) {
-     Swal.fire({
+  if (!user || !user.id) {
+    Swal.fire({
       icon: 'warning',
       title: 'ยังไม่ได้เข้าสู่ระบบ',
       text: 'กรุณาเข้าสู่ระบบก่อนใช้งานระบบจองตั๋ว',
@@ -68,12 +68,12 @@ function submitBooking() {
   }
 
   const bookingData = {
-    username: user.username,
+    userId: user.id,  // ✅ เปลี่ยนจาก username เป็น userId
     seats: Array.from(selectedSeats),
     totalPrice: selectedSeats.size * seatPrice,
     movie: "Doraemon: Nobita's Space Heroes",
     time: "20 เมษายน 2015 11:00",
-    cinema: "พารากอน Cinema 1",
+    cinema: "พารากอน Cinema 1"
   };
 
   // ✅ ตรวจสอบว่าที่นั่งถูกจองไปหรือยัง
@@ -105,7 +105,6 @@ function submitBooking() {
       return res.json();
     })
     .then((data) => {
-      // ✅ บันทึกข้อมูลสำหรับหน้าชำระเงิน
       localStorage.setItem("latestTicket", JSON.stringify({
         ticketId: data.ticketId,
         movie: bookingData.movie,
@@ -123,14 +122,14 @@ function submitBooking() {
           icon: 'error',
           title: 'ที่นั่งถูกจองแล้ว',
           text: '❌ ที่นั่งต่อไปนี้ถูกจองไปแล้ว: ' + err.duplicated.join(", "),
-      });
+        });
       } else {
         console.error("Booking Error:", err);
         Swal.fire({
           icon: 'error',
           title: 'เกิดข้อผิดพลาดในการจอง',
-          text: 'เกิดข้อผิดพลาดในการจอง: ' + err.message,
-      });
-    }
-  });
+          text: 'เกิดข้อผิดพลาด: ' + err.message,
+        });
+      }
+    });
 }
