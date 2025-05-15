@@ -1,0 +1,184 @@
+/* Base styles and reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #fff5f9;
+  color: #333;
+  line-height: 1.6;
+  padding-bottom: 30px;
+}
+
+/* Header styles */
+header {
+  background-color: #ff69b4;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Nav Links styling - เพิ่มส่วนนี้ */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #ffd1e6;
+}
+/* จบส่วนที่เพิ่ม */
+
+header button {
+  background-color: white;
+  color: #ff69b4;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+header button:hover {
+  background-color: #f8f8f8;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Section styles */
+section {
+  background-color: white;
+  margin: 20px 30px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+section h2 {
+  color: #ff69b4;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ffd1e6;
+  font-size: 20px;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+table th {
+  background-color: #ffd1e6;
+  color: #ff3399;
+  font-weight: bold;
+  text-align: left;
+  padding: 12px 15px;
+}
+
+table td {
+  padding: 10px 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+table tbody tr:hover {
+  background-color: #fff5f9;
+}
+
+/* Button styles in tables */
+table button {
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+table button:hover {
+  background-color: #ff3399;
+}
+
+table button.delete {
+  background-color: #ff4757;
+}
+
+table button.delete:hover {
+  background-color: #ff3333;
+}
+
+table button.edit {
+  background-color: #5352ed;
+}
+
+table button.edit:hover {
+  background-color: #3742fa;
+}
+
+/* Summary section */
+#summary {
+  background-color: #ffd1e6;
+  padding: 15px;
+  border-radius: 6px;
+  color: #ff3399;
+  text-align: left;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+  }
+  
+  header button {
+    margin-top: 10px;
+  }
+  
+  /* เพิ่ม responsive สำหรับ nav-links */
+  .nav-links {
+    margin: 10px 0;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  section {
+    margin: 15px;
+    padding: 15px;
+    overflow-x: auto;
+  }
+  
+  table {
+    font-size: 14px;
+  }
+  
+  table th, table td {
+    padding: 8px 10px;
+  }
+}
