@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรไฟล์ - เว็บไซต์ภาพยนตร์</title>
+    <title>แก้ไขโปรไฟล์ - เว็บไซต์ภาพยนตร์</title>
     <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/edit_profile.css">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -28,16 +29,24 @@
     <section class="profile-section">
         <div class="profile-card">
             <img src="../img/profile.png" alt="Profile Picture">
-            <div class="profile-info">
-                <p><span>ชื่อ:</span> <span id="profile-name"></span></p>
-                <p><span>อีเมล:</span> <span id="profile-email"></span></p>
-                <p><span>เบอร์โทรศัพท์:</span> <span id="profile-phone"></span></p>
-                <button type="submit" class="btn" onclick="logout()">Logout</button>
-                <button type="submit" class="btn" onclick="editProfile()">Edit Profile</button>
-            </div>
+
+            <!-- ✅ ฟอร์มแก้ไขโปรไฟล์ -->
+            <form id="profileForm">
+                <label for="username">ชื่อผู้ใช้:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="email">อีเมล:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">เบอร์โทรศัพท์:</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <button type="submit" class="btn">บันทึก</button>
+            </form>
+
         </div>
     </section>
 
-    <script src="../js/profile.js" defer></script>
+    <script src="../js/edit_profile.js" defer></script>
 </body>
 </html>

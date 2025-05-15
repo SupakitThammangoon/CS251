@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!user) {
-     Swal.fire({
+    Swal.fire({
       icon: 'warning',
       title: 'ยังไม่ได้เข้าสู่ระบบ',
       text: 'กรุณาเข้าสู่ระบบก่อนใช้งานระบบจองตั๋ว',
@@ -13,10 +13,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const res = await fetch("/api/user-bookings", {
+    const res = await fetch("http://localhost:3000/api/user-bookings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: user.username })
+      body: JSON.stringify({ userId: user.id }) // ✅ ใช้ user.id แทน username
     });
 
     const bookings = await res.json();
@@ -37,9 +37,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     bookings.sort((a, b) => new Date(b.booking_date) - new Date(a.booking_date));
 
     const html = bookings.map(b => {
-      // แยก time เป็น [20, เมษายน, 2015, 11:00]
       const parts = b.time.split(" ");
-      const fullDate = parts.slice(0, 3).join(" "); // "20 เมษายน 2015"
+      const fullDate = parts.slice(0, 3).join(" ");
       const timeOnly = parts[3] || "-";
 
       return `

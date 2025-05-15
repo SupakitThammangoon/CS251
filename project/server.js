@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ============================
 const dbConfig = {
   user: 'sa',
-  password: 'YourStrong@Passw0rd',
+  password: '12345',
   server: 'localhost',
   database: 'MovieDB', // ต้องตรงกับใน SSMS
   options: {
@@ -84,22 +84,68 @@ app.post('/api/login', async (req, res) => {
 });
 
 // ============================
-// 📌 API: จองตั๋ว
+// 📌 API: ดึงโปรไฟล์
+// ============================
+app.get('/api/profile/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await sql.connect(dbConfig);
+    const result = await sql.query`
+      SELECT id, username, email, phone FROM Users WHERE id = ${id}
+    `;
+
+    if (result.recordset.length > 0) {
+      res.status(200).json(result.recordset[0]);
+    } else {
+      res.status(404).json({ message: "ไม่พบผู้ใช้" });
+    }
+  } catch (error) {
+    console.error('❌ Profile Fetch Error:', error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงโปรไฟล์" });
+  }
+});
+
+// ============================
+// 📌 API: อัปเดตข้อมูลโปรไฟล์
+// ============================
+app.put('/api/profile/:id', async (req, res) => {
+  const { id } = req.params;
+  const { username, email, phone } = req.body;
+
+  try {
+    await sql.connect(dbConfig);
+    await sql.query`
+      UPDATE Users 
+      SET username = ${username}, email = ${email}, phone = ${phone}
+      WHERE id = ${id}
+    `;
+
+    res.status(200).json({ message: "อัปเดตโปรไฟล์สำเร็จ" });
+  } catch (error) {
+    console.error('❌ Profile Update Error:', error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการอัปเดตโปรไฟล์" });
+  }
+});
+
+
+// ============================
+// 📌 API: จองตั๋ว 
 // ============================
 app.post('/api/book', async (req, res) => {
-  const { username, seats, totalPrice, movie, time, cinema } = req.body;
+  const { userId, seats, totalPrice, movie, time, cinema } = req.body;
 
   try {
     await sql.connect(dbConfig);
 
     await sql.query`
-      INSERT INTO Bookings (username, movie, time, cinema, seats, total_price)
-      VALUES (${username}, ${movie}, ${time}, ${cinema}, ${seats.join(", ")}, ${totalPrice})
+      INSERT INTO Bookings (user_id, movie, time, cinema, seats, total_price)
+      VALUES (${userId}, ${movie}, ${time}, ${cinema}, ${seats.join(", ")}, ${totalPrice})
     `;
 
     res.status(200).json({
       message: "จองตั๋วสำเร็จ",
-      ticketId: Math.floor(Math.random() * 100000) // สุ่ม ticket ID สำหรับแสดงผล
+      ticketId: Math.floor(Math.random() * 100000)
     });
   } catch (error) {
     console.error("❌ Booking Error:", error);
@@ -108,16 +154,16 @@ app.post('/api/book', async (req, res) => {
 });
 
 // ============================
-// 📌 API: ดึงตั๋วทั้งหมดของผู้ใช้
+// 📌 API: ดึงตั๋วทั้งหมดของผู้ใช้ 
 // ============================
 app.post('/api/user-bookings', async (req, res) => {
-  const { username } = req.body;
+  const { userId } = req.body;
 
   try {
     await sql.connect(dbConfig);
 
     const result = await sql.query`
-      SELECT * FROM Bookings WHERE username = ${username}
+      SELECT * FROM Bookings WHERE user_id = ${userId}
     `;
 
     res.status(200).json(result.recordset);

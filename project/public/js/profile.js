@@ -34,4 +34,15 @@ function logout() {
     });
 }
 
+function editProfile() {
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!user || !user.id) {
+        Swal.fire("ไม่พบข้อมูลผู้ใช้", "กรุณาเข้าสู่ระบบใหม่", "error");
+        return;
+    }
+
+    // ส่งไปยังหน้าแก้ไขโปรไฟล์พร้อมแนบ user ID
+    window.location.href = `../html/edit_profile.html?id=${user.id}`;
+}
+
 
