@@ -71,3 +71,7 @@ function editProfile() {
   // ส่งไปยังหน้าแก้ไขโปรไฟล์พร้อมแนบ user ID
   window.location.href = `../html/edit_profile.html?id=${user.id}`;
 }
+
+function resetPassword() {
+    window.location.href = "../html/resetpassword.html";
+}

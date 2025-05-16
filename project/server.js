@@ -333,3 +333,43 @@ app.get('/api/profile/:id', async (req, res) => {
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงโปรไฟล์" });
   }
 });
+
+// ============================
+// 📌 API: เปลี่ยนรหัสผ่าน
+// ============================
+app.post('/api/change-password', async (req, res) => {
+  const { username, oldPassword, newPassword } = req.body;
+
+  try {
+    await sql.connect(dbConfig);
+
+    // ตรวจสอบรหัสผ่านเดิม
+    const check = await sql.query`
+      SELECT id FROM Users WHERE username = ${username} AND password = ${oldPassword}
+    `;
+
+    if (check.recordset.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: 'รหัสผ่านเดิมไม่ถูกต้อง'
+      });
+    }
+
+    // อัปเดตรหัสผ่านใหม่
+    await sql.query`
+      UPDATE Users SET password = ${newPassword} WHERE username = ${username}
+    `;
+
+    res.status(200).json({
+      success: true,
+      message: 'เปลี่ยนรหัสผ่านสำเร็จ'
+    });
+
+  } catch (error) {
+    console.error('❌ Change Password Error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน'
+    });
+  }
+});
