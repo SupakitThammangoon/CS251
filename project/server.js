@@ -38,24 +38,37 @@ app.get('/', (req, res) => {
 // 📌 API: ลงทะเบียน (เพิ่ม role เป็นค่าเริ่มต้น 'user')
 // ============================
 app.post('/api/register', async (req, res) => {
-  const { username, email, phone, password, role = 'user' } = req.body; // เพิ่ม role, default 'user'
+  const { username, email, phone, password, role = 'user' } = req.body;
 
   try {
-    // เชื่อมต่อฐานข้อมูล
     await sql.connect(dbConfig);
 
-    // INSERT ข้อมูลลง Table รวม role
+    if (!username || !email || !phone || !password) {
+      return res.status(400).json({ success: false, message: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
+    }
+
+    const check = await sql.query`
+      SELECT * FROM Users WHERE username = ${username} OR email = ${email}
+    `;
+
+    if (check.recordset.length > 0) {
+      return res.status(401).json({ success: false, message: 'ชื่อหรืออีเมลนี้มีผู้ใช้แล้ว' });
+    }
+
     await sql.query`
       INSERT INTO Users (username, email, phone, password, role)
       VALUES (${username}, ${email}, ${phone}, ${password}, ${role})
     `;
 
-    res.status(200).json({ message: 'ลงทะเบียนสำเร็จ!' });
+    const user = { username, email, phone, role };
+    res.status(200).json({ success: true, message: 'ลงทะเบียนสำเร็จ!', user });
+
   } catch (error) {
     console.error('❌ DB Error:', error);
-    res.status(500).json({ message: 'เกิดข้อผิดพลาดในการลงทะเบียน' });
+    res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการลงทะเบียน' });
   }
 });
+
 
 // ============================
 // 📌 API: เข้าสู่ระบบ (ดึง role ด้วย)
@@ -89,10 +102,15 @@ app.post('/api/login', async (req, res) => {
 app.get('/api/profile/:id', async (req, res) => {
   const { id } = req.params;
 
+  // ✅ ตรวจว่า id เป็นตัวเลขหรือไม่
+  if (!id || isNaN(id)) {
+    return res.status(400).json({ message: "รหัสผู้ใช้ไม่ถูกต้อง" });
+  }
+
   try {
     await sql.connect(dbConfig);
     const result = await sql.query`
-      SELECT id, username, email, phone FROM Users WHERE id = ${id}
+      SELECT id, username, email, phone FROM Users WHERE id = ${parseInt(id)}
     `;
 
     if (result.recordset.length > 0) {
@@ -106,15 +124,27 @@ app.get('/api/profile/:id', async (req, res) => {
   }
 });
 
+
 // ============================
 // 📌 API: อัปเดตข้อมูลโปรไฟล์
 // ============================
+// 📌 PUT /api/profile/:id
 app.put('/api/profile/:id', async (req, res) => {
   const { id } = req.params;
   const { username, email, phone } = req.body;
 
   try {
     await sql.connect(dbConfig);
+
+    // ✅ ตรวจสอบว่า username ซ้ำกับ user อื่นหรือไม่
+    const check = await sql.query`
+      SELECT id FROM Users WHERE username = ${username} AND id != ${id}
+    `;
+    if (check.recordset.length > 0) {
+      return res.status(409).json({ message: "ชื่อผู้ใช้นี้มีคนใช้แล้ว" });
+    }
+
+    // ✅ ถ้าไม่ซ้ำ → อัปเดต
     await sql.query`
       UPDATE Users 
       SET username = ${username}, email = ${email}, phone = ${phone}
@@ -127,6 +157,7 @@ app.put('/api/profile/:id', async (req, res) => {
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการอัปเดตโปรไฟล์" });
   }
 });
+
 
 
 // ============================

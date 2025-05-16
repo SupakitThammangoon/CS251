@@ -1,43 +1,43 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
-  if (!user) {
+  // ✅ ตรวจว่า user มี id จริงไหม
+  if (!user || !user.id) {
+    console.error("⚠️ ไม่มี user หรือ user.id ไม่ถูกต้อง", user);
     window.location.href = "../html/login.html";
     return;
   }
 
   try {
-    // ดึงข้อมูลโปรไฟล์จาก API
     const res = await fetch(`/api/profile/${user.id}`);
+
     if (!res.ok) throw new Error("ไม่สามารถดึงข้อมูลโปรไฟล์ได้");
 
     const data = await res.json();
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    localStorage.setItem("loggedInUser", JSON.stringify(data)); // อัปเดตข้อมูลใหม่จาก server
 
-
-    // แสดงข้อมูลบนหน้า (ถ้าไม่มีข้อมูลจาก API ใช้ข้อมูลเก่า)
     document.getElementById("profile-name").textContent = data.username || user.username;
     document.getElementById("profile-email").textContent = data.email || user.email;
     document.getElementById("profile-phone").textContent = data.phone || user.phone;
 
-    // แสดงปุ่ม admin หากเป็นผู้ดูแลระบบ
-   if (user.role === "admin") {
-  const adminBtn = document.createElement("button");
-  adminBtn.textContent = "Admin Panel";
-  adminBtn.className = "btn";
-  adminBtn.style.marginTop = "10px";
-  adminBtn.onclick = () => {
-    window.location.href = "../html/admin.html";
-  };
+    if (user.role === "admin") {
+      const adminBtn = document.createElement("button");
+      adminBtn.textContent = "Admin Panel";
+      adminBtn.className = "btn";
+      adminBtn.style.marginTop = "10px";
+      adminBtn.onclick = () => {
+        window.location.href = "../html/admin.html";
+      };
 
-  const section = document.getElementById("admin-section");
-  if (section) section.appendChild(adminBtn);
-}
+      const section = document.getElementById("admin-section");
+      if (section) section.appendChild(adminBtn);
+    }
   } catch (error) {
-    console.error(error);
+    console.error("❌ ดึงโปรไฟล์ล้มเหลว:", error);
     Swal.fire("ผิดพลาด", "ไม่สามารถโหลดข้อมูลโปรไฟล์ได้", "error");
   }
 });
+
 
 function logout() {
   // ลบข้อมูลออกก่อน

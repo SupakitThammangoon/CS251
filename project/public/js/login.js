@@ -14,30 +14,44 @@ setupToggleEye("loginPassword", "loginToggle");
 setupToggleEye("registerPassword", "registerToggle");
 
 document.getElementById("registerForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const formData = new FormData(this);
-    const data = {
-        username: formData.get("username"),
-        email: formData.get("email"),
-        phone: formData.get("phone"),
-        password: formData.get("password")
-    };
+  const formData = new FormData(this);
+  const data = {
+    username: formData.get("username"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    password: formData.get("password"),
+  };
 
-    try {
-        const response = await fetch("/api/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        });
+  try {
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
 
-        const result = await response.json();
-        alert(result.message); // แจ้งผลลัพธ์
+    const result = await response.json();
+    if (result.success) {
+      // บันทึกผู้ใช้
+      localStorage.setItem("loggedInUser", JSON.stringify(result.user || data));
 
-    } catch (error) {
-        console.error("เกิดข้อผิดพลาด", error);
-        alert("สมัครไม่สำเร็จ");
+      Swal.fire({
+        icon: 'success',
+        title: 'ลงทะเบียนสำเร็จ!',
+        text: `ยินดีต้อนรับ, ${data.username}`,
+        timer: 2000,
+        showConfirmButton: false
+      }).then(() => {
+        window.location.href = "profile.html";
+      });
+    } else {
+      Swal.fire("ไม่ผ่าน!", result.message, "error");
     }
+  } catch (error) {
+    console.error("Register Error:", error);
+    Swal.fire("เกิดข้อผิดพลาด!", "เซิร์ฟเวอร์ผิดปกติ", "error");
+  }
 });
 
 document.querySelector(".login .btn").addEventListener("click", async function () {

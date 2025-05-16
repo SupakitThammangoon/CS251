@@ -54,7 +54,7 @@ document.getElementById('profileForm').addEventListener('submit', function (e) {
     })
     .catch(err => {
       console.error("❌ Error updating profile:", err);
-      Swal.fire("ผิดพลาด", "ไม่สามารถอัปเดตได้", "error");
+      Swal.fire("ผิดพลาด", "ชื่อหรืออีเมล์มีผู้ใช้แล้ว", "error");
     });
 });
 
