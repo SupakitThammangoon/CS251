@@ -18,8 +18,7 @@ async function loadUsers() {
         <td>${user.username}</td>
         <td>${user.email}</td>
         <td>${user.phone}</td>
-        <td><button onclick="deleteUser(${user.id})">ลบ</button></td>
-      `;
+        <td><button class="delete-btn" onclick="deleteUser(${user.id})">ลบ</button></td>      `;
       tbody.appendChild(tr);
     });
   } catch (error) {
@@ -56,7 +55,7 @@ async function loadBookings() {
         <td>${bk.cinema}</td>
         <td>${bk.seats}</td>
         <td>${bk.total_price}</td>
-        <td><button onclick="deleteBooking(${bk.id})">ลบ</button></td>
+        <td><button class="delete-btn" onclick="deleteBooking(${bk.id})">ลบ</button></td>
       `;
       tbody.appendChild(tr);
     });
