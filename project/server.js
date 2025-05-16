@@ -144,6 +144,14 @@ app.put('/api/profile/:id', async (req, res) => {
       return res.status(409).json({ message: "ชื่อผู้ใช้นี้มีคนใช้แล้ว" });
     }
 
+    // ✅ ตรวจสอบว่า email ซ้ำกับ user อื่นหรือไม่
+    const checkEmail = await sql.query`
+      SELECT id FROM Users WHERE email = ${email} AND id != ${id}
+    `;
+    if (checkEmail.recordset.length > 0) {
+      return res.status(409).json({ message: "อีเมลนี้มีคนใช้แล้ว" });
+    }
+
     // ✅ ถ้าไม่ซ้ำ → อัปเดต
     await sql.query`
       UPDATE Users 
