@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch (err) {
           console.error("Change Password Error:", err);
-          Swal.fire("แม่งพัง!", "เกิดข้อผิดพลาดขณะเปลี่ยนรหัสผ่าน", "error");
+          Swal.fire("ระบบผิดผลาด!", "เกิดข้อผิดพลาดขณะเปลี่ยนรหัสผ่าน", "error");
         }
       });
     });
